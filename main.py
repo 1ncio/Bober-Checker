@@ -1,18 +1,14 @@
+import os
 import requests
 import warnings
-import time
 from workers.ui import *
 from workers.utils import *
 from utils.session import TLSSession
-import re,asyncio
-import concurrent.futures,json
+import asyncio
+import concurrent.futures
+import json
 from modules.checkBan import CheckBan
 
-from minecraft.networking.connection import Connection
-from minecraft.authentication import AuthenticationToken, Profile
-from minecraft.networking.connection import Connection
-from minecraft.networking.packets import clientbound
-from minecraft.exceptions import LoginDisconnect
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
@@ -332,7 +328,7 @@ async def main(account):
 
             ign = await mc.checkign(login)
 
-            if mc.id_user:
+            if mc.id_user and config.get("hypixel", True):
                 banStatus = CheckBan(login, mc.name, mc.id_user).check_ban()
 
                 if banStatus == "False":
@@ -348,7 +344,7 @@ async def main(account):
             if ign:
 
                 with open(f"output/{minecraft}.txt", "a") as f:
-                    f.write(f"{mc.email}:{mc.password} | name={ign} | Banned={banStatus}\n")
+                    f.write(f"{mc.email}:{mc.password} | name={ign} | Banned={banStatus.replace("\n", "")} | toke={login}\n")
 
 
 
@@ -373,6 +369,8 @@ if __name__ == "__main__":
 
     with open("config.json", "r") as f:
         config = json.load(f)
+        
+    os.makedirs("output", exist_ok=True)
 
     loop = asyncio.get_event_loop()
 
