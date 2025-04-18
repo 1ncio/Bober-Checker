@@ -344,7 +344,7 @@ async def main(account):
             if ign:
 
                 with open(f"output/{minecraft}.txt", "a") as f:
-                    f.write(f"{mc.email}:{mc.password} | name={ign} | Banned={banStatus.replace("\n", "")} | toke={login}\n")
+                    f.write(f"{mc.email}:{mc.password} | name={ign} | Banned={banStatus.replace("\n", "")} | token={login}\n")
 
 
 
